@@ -18,3 +18,12 @@ print(f"Great to meet you, {user_name}!")
 age_input = input("How old are you? ")
 age = int(age_input)  # Converts the text to an integer (whole number)
 print(f"Next year, you will be {age + 1} years old.")
+
+score = 85
+
+if score >= 90:
+    print("Grade: A")
+elif score >= 80:
+    print("Grade: B")
+else:
+    print("Grade: C or below")
