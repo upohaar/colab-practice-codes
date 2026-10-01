@@ -27,3 +27,11 @@ elif score >= 80:
     print("Grade: B")
 else:
     print("Grade: C or below")
+
+    # Defining a function with 'def'
+def greet_user(username):
+    print(f"Hello, {username}! Have a fantastic day.")
+
+# Calling the function
+greet_user("Bob")
+greet_user("Charlie")
