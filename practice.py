@@ -40,3 +40,5 @@ greet_user("Charlie")
 # This is a comment. Python ignores lines starting with '#'
 print("Hello, World!")
 print("Welcome to Python programming!")
+
+
