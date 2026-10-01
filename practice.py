@@ -8,3 +8,13 @@ total = x + y
 
 # Printing variables (using an 'f-string' to mix text and variables)
 print(f"Hi {name}, the total of {x} + {y} is {total}.")
+
+
+# input() always captures text as a String
+user_name = input("What is your name? ")
+print(f"Great to meet you, {user_name}!")
+
+# To get a number, you must convert it using int() or float()
+age_input = input("How old are you? ")
+age = int(age_input)  # Converts the text to an integer (whole number)
+print(f"Next year, you will be {age + 1} years old.")
