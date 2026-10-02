@@ -54,23 +54,54 @@
 #     print(f"Wrong! The number was {secret_number}.")
 
 
+# import random
+
+# choices = ["rock", "paper", "scissors"]
+
+# print("--- Rock, Paper, Scissors ---")
+# user_choice = input("Enter rock, paper, or scissors: ").lower()
+# computer_choice = random.choice(choices)
+
+# print(f"Computer chose: {computer_choice}")
+
+# if user_choice == computer_choice:
+#     print("It's a tie!")
+# elif (user_choice == "rock" and computer_choice == "scissors") or \
+#      (user_choice == "paper" and computer_choice == "rock") or \
+#      (user_choice == "scissors" and computer_choice == "paper"):
+#     print("You win!")
+# elif user_choice in choices:
+#     print("Computer wins!")
+# else:
+#     print("Invalid choice! Please restart and type rock, paper, or scissors.")
+
+
 import random
+import time
 
-choices = ["rock", "paper", "scissors"]
+print("--- Dice Roller Battle ---")
 
-print("--- Rock, Paper, Scissors ---")
-user_choice = input("Enter rock, paper, or scissors: ").lower()
-computer_choice = random.choice(choices)
+playing = True
+while playing:
+    input("Press Enter to roll the dice...")
+    
+    user_roll = random.randint(1, 6)
+    comp_roll = random.randint(1, 6)
+    
+    print(f"You rolled: {user_roll}")
+    print("Computer is rolling...")
+    time.sleep(1) # Adds a 1-second dramatic pause
+    print(f"Computer rolled: {comp_roll}")
+    
+    if user_roll > comp_roll:
+        print("You win this round!")
+    elif comp_roll > user_roll:
+        print("Computer wins this round!")
+    else:
+        print("It's a draw!")
+        
+    again = input("Play again? (y/n): ").lower()
+    if again != 'y':
+        playing = False
 
-print(f"Computer chose: {computer_choice}")
-
-if user_choice == computer_choice:
-    print("It's a tie!")
-elif (user_choice == "rock" and computer_choice == "scissors") or \
-     (user_choice == "paper" and computer_choice == "rock") or \
-     (user_choice == "scissors" and computer_choice == "paper"):
-    print("You win!")
-elif user_choice in choices:
-    print("Computer wins!")
-else:
-    print("Invalid choice! Please restart and type rock, paper, or scissors.")
+print("Thanks for playing!")
