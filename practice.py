@@ -126,6 +126,7 @@ if choice1 == "door":
 elif choice1 == "window":
     print("\nYou climb through the window and land directly inside the treasure room!")
     choice2 = input("Do you 'take' the gold or 'leave' it alone? ").lower()
+
     
     if choice2 == "take":
         print("\nTaking the gold triggers a trap! The room fills with water. Game Over! (Bad Ending)")
