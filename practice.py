@@ -41,14 +41,36 @@
 # print("Hello, World!")
 # print("Welcome to Python programming!")
 
+# import random
+
+# secret_number = random.randint(1, 10)
+# print("I'm thinking of a number between 1 and 10.")
+
+# guess = int(input("Take a guess: "))
+
+# if guess == secret_number:
+#     print("Correct! You win!")
+# else:
+#     print(f"Wrong! The number was {secret_number}.")
+
+
 import random
 
-secret_number = random.randint(1, 10)
-print("I'm thinking of a number between 1 and 10.")
+choices = ["rock", "paper", "scissors"]
 
-guess = int(input("Take a guess: "))
+print("--- Rock, Paper, Scissors ---")
+user_choice = input("Enter rock, paper, or scissors: ").lower()
+computer_choice = random.choice(choices)
 
-if guess == secret_number:
-    print("Correct! You win!")
+print(f"Computer chose: {computer_choice}")
+
+if user_choice == computer_choice:
+    print("It's a tie!")
+elif (user_choice == "rock" and computer_choice == "scissors") or \
+     (user_choice == "paper" and computer_choice == "rock") or \
+     (user_choice == "scissors" and computer_choice == "paper"):
+    print("You win!")
+elif user_choice in choices:
+    print("Computer wins!")
 else:
-    print(f"Wrong! The number was {secret_number}.")
+    print("Invalid choice! Please restart and type rock, paper, or scissors.")
