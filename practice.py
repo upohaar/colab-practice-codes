@@ -79,32 +79,32 @@
 # import random
 # import time
 
-# print("--- Dice Roller Battle ---")
+print("--- Dice Roller Battle ---")
 
-# playing = True
-# while playing:
-#     input("Press Enter to roll the dice...")
+playing = True
+while playing:
+    input("Press Enter to roll the dice...")
     
-#     user_roll = random.randint(1, 6)
-#     comp_roll = random.randint(1, 6)
+    user_roll = random.randint(1, 6)
+    comp_roll = random.randint(1, 6)
     
-#     print(f"You rolled: {user_roll}")
-#     print("Computer is rolling...")
-#     time.sleep(1) # Adds a 1-second dramatic pause
-#     print(f"Computer rolled: {comp_roll}")
+    print(f"You rolled: {user_roll}")
+    print("Computer is rolling...")
+    time.sleep(1) # Adds a 1-second dramatic pause
+    print(f"Computer rolled: {comp_roll}")
     
-#     if user_roll > comp_roll:
-#         print("You win this round!")
-#     elif comp_roll > user_roll:
-#         print("Computer wins this round!")
-#     else:
-#         print("It's a draw!")
+    if user_roll > comp_roll:
+        print("You win this round!")
+    elif comp_roll > user_roll:
+        print("Computer wins this round!")
+    else:
+        print("It's a draw!")
         
-#     again = input("Play again? (y/n): ").lower()
-#     if again != 'y':
-#         playing = False
+    again = input("Play again? (y/n): ").lower()
+    if again != 'y':
+        playing = False
 
-# print("Thanks for playing!")
+print("Thanks for playing!")
 
 
 
