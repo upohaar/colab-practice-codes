@@ -76,32 +76,61 @@
 #     print("Invalid choice! Please restart and type rock, paper, or scissors.")
 
 
-import random
-import time
+# import random
+# import time
 
-print("--- Dice Roller Battle ---")
+# print("--- Dice Roller Battle ---")
 
-playing = True
-while playing:
-    input("Press Enter to roll the dice...")
+# playing = True
+# while playing:
+#     input("Press Enter to roll the dice...")
     
-    user_roll = random.randint(1, 6)
-    comp_roll = random.randint(1, 6)
+#     user_roll = random.randint(1, 6)
+#     comp_roll = random.randint(1, 6)
     
-    print(f"You rolled: {user_roll}")
-    print("Computer is rolling...")
-    time.sleep(1) # Adds a 1-second dramatic pause
-    print(f"Computer rolled: {comp_roll}")
+#     print(f"You rolled: {user_roll}")
+#     print("Computer is rolling...")
+#     time.sleep(1) # Adds a 1-second dramatic pause
+#     print(f"Computer rolled: {comp_roll}")
     
-    if user_roll > comp_roll:
-        print("You win this round!")
-    elif comp_roll > user_roll:
-        print("Computer wins this round!")
-    else:
-        print("It's a draw!")
+#     if user_roll > comp_roll:
+#         print("You win this round!")
+#     elif comp_roll > user_roll:
+#         print("Computer wins this round!")
+#     else:
+#         print("It's a draw!")
         
-    again = input("Play again? (y/n): ").lower()
-    if again != 'y':
-        playing = False
+#     again = input("Play again? (y/n): ").lower()
+#     if again != 'y':
+#         playing = False
 
-print("Thanks for playing!")
+# print("Thanks for playing!")
+
+
+
+
+print("--- Haunted Castle Adventure ---")
+print("You stand in front of a dark castle. The grand door is open.")
+
+choice1 = input("Do you enter through the 'door' or look for a 'window'? ").lower()
+
+if choice1 == "door":
+    print("\nYou walk into the dark hallway. A giant vampire appears!")
+    choice2 = input("Do you 'fight' or 'run'? ").lower()
+    
+    if choice2 == "run":
+        print("\nYou safely escape out the door. You live to see another day! (Good Ending)")
+    else:
+        print("\nYou tried to fight a vampire with no weapons? Game Over! (Bad Ending)")
+
+elif choice1 == "window":
+    print("\nYou climb through the window and land directly inside the treasure room!")
+    choice2 = input("Do you 'take' the gold or 'leave' it alone? ").lower()
+    
+    if choice2 == "take":
+        print("\nTaking the gold triggers a trap! The room fills with water. Game Over! (Bad Ending)")
+    else:
+        print("\nYou leave the gold, find a safe secret exit, and escape unharmed! (Safe Ending)")
+
+else:
+    print("\nYou hesitated too long and a ghost scared you away! Game Over.")
