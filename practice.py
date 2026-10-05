@@ -114,32 +114,32 @@
 
 
 
-# print("--- Haunted Castle Adventure ---")
-# print("You stand in front of a dark castle. The grand door is open.")
+print("--- Haunted Castle Adventure ---")
+print("You stand in front of a dark castle. The grand door is open.")
 
-# choice1 = input("Do you enter through the 'door' or look for a 'window'? ").lower()
+choice1 = input("Do you enter through the 'door' or look for a 'window'? ").lower()
 
-# if choice1 == "door":
-#     print("\nYou walk into the dark hallway. A giant vampire appears!")
-#     choice2 = input("Do you 'fight' or 'run'? ").lower()
+if choice1 == "door":
+    print("\nYou walk into the dark hallway. A giant vampire appears!")
+    choice2 = input("Do you 'fight' or 'run'? ").lower()
     
-#     if choice2 == "run":
-#         print("\nYou safely escape out the door. You live to see another day! (Good Ending)")
-#     else:
-#         print("\nYou tried to fight a vampire with no weapons? Game Over! (Bad Ending)")
+    if choice2 == "run":
+        print("\nYou safely escape out the door. You live to see another day! (Good Ending)")
+    else:
+        print("\nYou tried to fight a vampire with no weapons? Game Over! (Bad Ending)")
 
-# elif choice1 == "window":
-#     print("\nYou climb through the window and land directly inside the treasure room!")
-#     choice2 = input("Do you 'take' the gold or 'leave' it alone? ").lower()
+elif choice1 == "window":
+    print("\nYou climb through the window and land directly inside the treasure room!")
+    choice2 = input("Do you 'take' the gold or 'leave' it alone? ").lower()
 
     
-#     if choice2 == "take":
-#         print("\nTaking the gold triggers a trap! The room fills with water. Game Over! (Bad Ending)")
-#     else:
-#         print("\nYou leave the gold, find a safe secret exit, and escape unharmed! (Safe Ending)")
+    if choice2 == "take":
+        print("\nTaking the gold triggers a trap! The room fills with water. Game Over! (Bad Ending)")
+    else:
+        print("\nYou leave the gold, find a safe secret exit, and escape unharmed! (Safe Ending)")
 
-# else:
-#     print("\nYou hesitated too long and a ghost scared you away! Game Over.")
+else:
+    print("\nYou hesitated too long and a ghost scared you away! Game Over.")
 
 
 
