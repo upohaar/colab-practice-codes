@@ -111,9 +111,6 @@
 
 # print("Thanks for playing!")
 
-
-
-
 print("--- Haunted Castle Adventure ---")
 print("You stand in front of a dark castle. The grand door is open.")
 
@@ -140,7 +137,3 @@ elif choice1 == "window":
 
 else:
     print("\nYou hesitated too long and a ghost scared you away! Game Over.")
-
-
-
-    
