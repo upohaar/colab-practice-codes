@@ -268,8 +268,53 @@ def scan_ports(target_host, ports_to_scan=[21, 22, 80, 443, 8080]):
         else:
             print(f"Port {port:<5}: Closed/Filtered")
         s.close()
-        
+
 
 if __name__ == "__main__":
     # Scan localhost or a safe public test server like 'scanme.nmap.org'
     scan_ports("localhost", [22, 80, 135, 443, 902])
+
+
+    import requests
+from bs4 import BeautifulSoup
+
+def scrape_news(url):
+    print(f"Fetching headlines from: {url}...")
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to retrieve page: {e}")
+        return []
+
+    soup = BeautifulSoup(response.text, 'html.parser')
+    articles = []
+
+    # Target specific HTML structures (using Nmap's test sandbox layout as an example)
+    # Adjust selectors according to your actual target site's HTML classes
+    for item in soup.find_all(['h1', 'h2', 'h3']):
+        title_text = item.get_text(strip=True)
+        link_tag = item.find('a')
+        
+        if title_text and len(title_text) > 10:  # Filter out short menu items
+            link_url = link_tag['href'] if link_tag and link_tag.has_attr('href') else "No Link Available"
+            articles.append({
+                "title": title_text,
+                "url": link_url
+            })
+            
+    return articles
+
+if __name__ == "__main__":
+    # Using Nmap's public test sandbox domain
+    target_site = "https://nmap.org"
+    scraped_data = scrape_news(target_site)
+    
+    print(f"\nFound {len(scraped_data)} notable items:")
+    for i, article in enumerate(scraped_data, 1):
+        print(f"\n[{i}] {article['title']}")
+        print(f"    Link: {article['url']}")
