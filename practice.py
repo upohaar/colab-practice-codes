@@ -237,3 +237,38 @@ def display_dashboard():
 
 if __name__ == "__main__":
     display_dashboard()
+
+
+    import socket
+from datetime import datetime
+
+def scan_ports(target_host, ports_to_scan=[21, 22, 80, 443, 8080]):
+    print("-" * 50)
+    print(f"Scanning Target: {target_host}")
+    print(f"Time Started: {str(datetime.now())}")
+    print("-" * 50)
+
+    try:
+        # Resolve target hostname to IP address
+        target_ip = socket.gethostbyname(target_host)
+    except socket.gaierror:
+        print("\nHostname could not be resolved.")
+        return
+
+    for port in ports_to_scan:
+        # AF_INET specifies IPv4, SOCK_STREAM specifies TCP connection
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # Set a small timeout so the program doesn't hang indefinitely
+        s.settimeout(1.0)
+        
+        # connect_ex returns an error code instead of raising an exception
+        result = s.connect_ex((target_ip, port))
+        if result == 0:
+            print(f"Port {port:<5}: OPEN")
+        else:
+            print(f"Port {port:<5}: Closed/Filtered")
+        s.close()
+
+if __name__ == "__main__":
+    # Scan localhost or a safe public test server like 'scanme.nmap.org'
+    scan_ports("localhost", [22, 80, 135, 443, 902])
