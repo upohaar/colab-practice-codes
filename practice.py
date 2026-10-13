@@ -318,3 +318,73 @@ if __name__ == "__main__":
     for i, article in enumerate(scraped_data, 1):
         print(f"\n[{i}] {article['title']}")
         print(f"    Link: {article['url']}")
+
+
+        import shutil
+from pathlib import Path
+
+def organize_folder(target_dir):
+    # Convert string path to a Path object
+    path = Path(target_dir)
+    
+    if not path.exists():
+        print(f"The directory {target_dir} does not exist.")
+        return
+
+    # Map extensions to destination folders
+    FILE_CATEGORIES = {
+        "Images": [".jpg", ".jpeg", ".png", ".gif", ".svg", ".bmp"],
+        "Documents": [".pdf", ".docx", ".doc", ".txt", ".xlsx", ".pptx", ".md"],
+        "Audio": [".mp3", ".wav", ".m4a", ".flac"],
+        "Videos": [".mp4", ".mkv", ".avi", ".mov"],
+        "Archives": [".zip", ".tar", ".gz", ".rar", ".7z"],
+        "Scripts": [".py", ".js", ".html", ".css", ".sh"]
+    }
+
+    print(f"Organizing files in: {path.resolve()}")
+    moved_count = 0
+
+    # Iterate through all items in the directory
+    for item in path.iterdir():
+        if item.is_file():
+            file_ext = item.suffix.lower()
+            moved = False
+            
+            # Find matching category
+            for category, extensions in FILE_CATEGORIES.items():
+                if file_ext in extensions:
+                    dest_folder = path / category
+                    dest_folder.mkdir(exist_ok=True)  # Create category folder if missing
+                    
+                    # Prevent overwriting existing files
+                    dest_path = dest_folder / item.name
+                    if dest_path.exists():
+                        dest_path = dest_folder / f"copy_{item.name}"
+                        
+                    shutil.move(str(item), str(dest_path))
+                    print(f"Moved: {item.name} -> {category}/")
+                    moved_count += 1
+                    moved = True
+                    break
+            
+            # Group uncategorized files
+            if not moved:
+                misc_folder = path / "Others"
+                misc_folder.mkdir(exist_ok=True)
+                shutil.move(str(item), str(misc_folder / item.name))
+                print(f"Moved: {item.name} -> Others/")
+                moved_count += 1
+
+    print(f"\nCleanup complete! Total files organized: {moved_count}")
+
+if __name__ == "__main__":
+    # Create a quick dummy folder locally to safe-test the code
+    test_path = "./sandbox_downloads"
+    Path(test_path).mkdir(exist_ok=True)
+    
+    # Create a dummy file to test logic
+    (Path(test_path) / "test_report.pdf").touch()
+    (Path(test_path) / "vacation_pic.jpg").touch()
+    
+    # Run cleaner
+    organize_folder(test_path)
