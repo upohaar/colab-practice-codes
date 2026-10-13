@@ -192,3 +192,48 @@ if __name__ == "__main__":
     
     # Generate aggregate metrics
     tracker.get_summary()
+
+
+    import requests
+import time
+import sys
+
+def fetch_crypto_prices(crypto_ids=["bitcoin", "ethereum", "solana"]):
+    """Fetches real-time price trends using the CoinGecko public API."""
+    url = "https://coingecko.com"
+    params = {
+        "ids": ",".join(crypto_ids),
+        "vs_currencies": "usd",
+        "include_24hr_change": "true"
+    }
+    
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status() # Raise exception for bad HTTP status
+        return response.json()
+    except requests.exceptions.RequestException as e:
+        print(f"\nError contacting API: {e}")
+        return None
+
+def display_dashboard():
+    print("Fetching live market tracking data (Press Ctrl+C to exit)...")
+    try:
+        while True:
+            data = fetch_crypto_prices()
+            if data:
+                # Clear terminal line tricks or print dividers
+                print(f"\n--- Market Update: {time.strftime('%H:%M:%S')} ---")
+                for coin, details in data.items():
+                    price = details.get("usd", 0)
+                    change = details.get("usd_24h_change", 0)
+                    sign = "+" if change >= 0 else ""
+                    print(f"{coin.capitalize():<12}: ${price:,.2f} ({sign}{change:.2f}%)")
+            
+            # Throttle requests to respect public API rate limits
+            time.sleep(15)
+    except KeyboardInterrupt:
+        print("\nDashboard closed safely.")
+        sys.exit()
+
+if __name__ == "__main__":
+    display_dashboard()
