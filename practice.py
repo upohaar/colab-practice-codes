@@ -385,6 +385,7 @@ if __name__ == "__main__":
     # Create a dummy file to test logic
     (Path(test_path) / "test_report.pdf").touch()
     (Path(test_path) / "vacation_pic.jpg").touch()
+
     
     # Run cleaner
     organize_folder(test_path)
