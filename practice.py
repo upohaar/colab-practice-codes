@@ -135,3 +135,60 @@ elif choice1 == "window":
 
 else:
     print("\nYou hesitated too long and a ghost scared you away! Game Over.")
+
+
+    import csv
+from datetime import datetime
+
+class Expense:
+    def __init__(self, amount, category, description):
+        self.amount = float(amount)
+        self.category = category
+        self.description = description
+        self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+class ExpenseTracker:
+    def __init__(self, filename="expenses.csv"):
+        self.filename = filename
+        # Ensure file exists and has a header
+        try:
+            with open(self.filename, 'x', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(["Date", "Amount", "Category", "Description"])
+        except FileExistsError:
+            pass
+
+    def add_expense(self, expense):
+        with open(self.filename, 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow([expense.date, expense.amount, expense.category, expense.description])
+        print("Expense recorded successfully!")
+
+    def get_summary(self):
+        total = 0.0
+        categories = {}
+        try:
+            with open(self.filename, 'r') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    amt = float(row["Amount"])
+                    total += amt
+                    categories[row["Category"]] = categories.get(row["Category"], 0.0) + amt
+            
+            print(f"\n--- Total Expenses: ${total:.2f} ---")
+            for cat, amt in categories.items():
+                print(f" * {cat}: ${amt:.2f}")
+        except FileNotFoundError:
+            print("No expenses recorded yet.")
+
+# Example Usage
+if __name__ == "__main__":
+    tracker = ExpenseTracker()
+    
+    # Simulating adding data
+    tracker.add_expense(Expense(12.50, "Food", "Lunch at cafe"))
+    tracker.add_expense(Expense(45.00, "Transport", "Gas fill up"))
+    tracker.add_expense(Expense(8.99, "Food", "Coffee snack"))
+    
+    # Generate aggregate metrics
+    tracker.get_summary()
