@@ -268,6 +268,7 @@ def scan_ports(target_host, ports_to_scan=[21, 22, 80, 443, 8080]):
         else:
             print(f"Port {port:<5}: Closed/Filtered")
         s.close()
+        
 
 if __name__ == "__main__":
     # Scan localhost or a safe public test server like 'scanme.nmap.org'
