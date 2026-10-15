@@ -327,7 +327,9 @@ def organize_folder(target_dir):
     # Convert string path to a Path object
     path = Path(target_dir)
     
- 
+    if not path.exists():
+        print(f"The directory {target_dir} does not exist.")
+        return
 
     # Map extensions to destination folders
     FILE_CATEGORIES = {
