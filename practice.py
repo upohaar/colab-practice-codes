@@ -377,14 +377,9 @@ def organize_folder(target_dir):
     print(f"\nCleanup complete! Total files organized: {moved_count}")
 
 if __name__ == "__main__":
-    # Create a quick dummy folder locally to safe-test the code
+    
     test_path = "./sandbox_downloads"
     Path(test_path).mkdir(exist_ok=True)
-    
-    # Create a dummy file to test logic
     (Path(test_path) / "test_report.pdf").touch()
     (Path(test_path) / "vacation_pic.jpg").touch()
-
-    
-    # Run cleaner
     organize_folder(test_path)
