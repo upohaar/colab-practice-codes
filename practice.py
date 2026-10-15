@@ -354,10 +354,7 @@ def organize_folder(target_dir):
             for category, extensions in FILE_CATEGORIES.items():
                 if file_ext in extensions:
                     dest_folder = path / category
-                    dest_folder.mkdir(exist_ok=True)  # Create category folder if missing
-
-
-                    
+                    dest_folder.mkdir(exist_ok=True)
                     # Prevent overwriting existing files
                     dest_path = dest_folder / item.name
                     if dest_path.exists():
