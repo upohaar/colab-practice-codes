@@ -384,7 +384,6 @@
 #     (Path(test_path) / "vacation_pic.jpg").touch()
 #     organize_folder(test_path)
 
-
 import asyncio
 import functools
 import logging
@@ -396,7 +395,21 @@ from dataclasses import dataclass, field
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
 
-# --- 1. ADVANCED METAPROGRAMMING: DECORATOR ---
+# --- 1. METACLASS ARCHITECTURE (NEW) ---
+class EnforceTypeHintsMeta(type):
+    """A strict metaclass that validates that all defined methods have type hints."""
+    def __new__(cls, name: str, bases: tuple, dct: dict) -> Any:
+        for attr_name, attr_value in dct.items():
+            # Check only callable methods (ignoring private/dunder methods)
+            if callable(attr_value) and not attr_name.startswith("__"):
+                annotations = attr_value.__annotations__
+                if 'return' not in annotations:
+                    raise TypeError(f"Architecture violation: Method '{attr_name}' in class '{name}' is missing a return type hint.")
+                if len(annotations) <= 1 and attr_value.__code__.co_argcount > 1:
+                    raise TypeError(f"Architecture violation: Method '{attr_name}' in class '{name}' is missing argument type hints.")
+        return super().__new__(cls, name, bases, dct)
+
+# --- 2. ADVANCED METAPROGRAMMING: DECORATOR ---
 def async_timed(func: Callable[..., Any]) -> Callable[..., Any]:
     """An asynchronous execution timer decorator that preserves function metadata."""
     @functools.wraps(func)
@@ -410,7 +423,7 @@ def async_timed(func: Callable[..., Any]) -> Callable[..., Any]:
             logger.info(f"Finished '{func.__name__}' in {total_time:.4f} seconds")
     return wrapper
 
-# --- 2. DATA LAYER WITH TYPE HINTING ---
+# --- 3. DATA LAYER WITH TYPE HINTING ---
 @dataclass(frozen=True)
 class DataPayload:
     """An immutable data record utilizing static typing guidelines."""
@@ -418,12 +431,12 @@ class DataPayload:
     payload_type: str
     metadata: Dict[str, Any] = field(default_factory=dict)
 
-# --- 3. RESOURCE MANAGEMENT: CONTEXT MANAGER ---
-class ManagedQueueContext:
-    """An asynchronous context manager managing lifecycle states of a memory queue."""
+# --- 4. RESOURCE MANAGEMENT: CONTEXT MANAGER ---
+class ManagedQueueContext(metaclass=EnforceTypeHintsMeta):
+    """An asynchronous context manager managing lifecycle states using our strict metaclass."""
     def __init__(self, maxsize: int = 10) -> None:
         self.maxsize = maxsize
-        self._queue: asyncio.Queue[DataPayload] | None = None
+        self.._queue: asyncio.Queue[DataPayload] | None = None
 
     async def __aenter__(self) -> asyncio.Queue[DataPayload]:
         logger.info("Initializing managed execution queue infrastructure...")
@@ -434,72 +447,79 @@ class ManagedQueueContext:
         logger.info("Tearing down queue infrastructure and flushing memory allocations.")
         if exc_type:
             logger.error(f"Context exited with an unhandled exception: {exc_val}")
-        # Additional cleanups (connections, pools) happen safely here
 
-# --- 4. ASYNC CONCURRENCY ENGINE ---
-class DataProcessingEngine:
-    """Concurrently produces and processes intensive generic non-blocking streams."""
+# --- 5. ASYNC CONCURRENCY ENGINE WITH STRUCTURAL MATCHING ---
+class DataProcessingEngine(metaclass=EnforceTypeHintsMeta):
+    """Concurrently produces and processes intensive streams, validated by EnforceTypeHintsMeta."""
     
     def __init__(self, queue: asyncio.Queue[DataPayload]) -> None:
         self.queue = queue
 
     async def stream_generator(self, limit: int) -> AsyncGenerator[DataPayload, None]:
-        """An asynchronous generator yielding data packets efficiently on demand."""
+        """An asynchronous generator yielding varying data packets dynamically."""
         for i in range(1, limit + 1):
-            await asyncio.sleep(0.1)  # Simulating network latency / I/O bound wait
-            yield DataPayload(task_id=i, payload_type="SensorTelemetrics")
+            await asyncio.sleep(0.1)  # Simulating network latency
+            # Alternating payload types to showcase structural pattern matching
+            p_type = "SensorTelemetrics" if i % 2 == 0 else "AlertSystem"
+            meta = {"alert_level": "CRITICAL"} if p_type == "AlertSystem" else {"voltage": 220}
+            yield DataPayload(task_id=i, payload_type=p_type, metadata=meta)
 
     async def producer(self, total_items: int) -> None:
         """Asynchronously streams data points directly into the processing pipeline queue."""
         async for item in self.stream_generator(total_items):
             await self.queue.put(item)
-            logger.info(f"Produced payload for Task ID: {item.task_id}")
+            logger.info(f"Produced payload for Task ID: {item.task_id} ({item.payload_type})")
         
-        # Sentinel value pattern to signal consumers that production is finished
         await self.queue.put(None)  # type: ignore
 
     @async_timed
     async def consumer(self, worker_id: int) -> None:
-        """Consumes batches safely from the asynchronous task queue infrastructure."""
+        """Consumes batches safely and routes them via Structural Pattern Matching."""
         while True:
             item = await self.queue.get()
             
             if item is None:
-                # Put the sentinel back so other concurrent consumers know to terminate
                 await self.queue.put(None)  # type: ignore
                 self.queue.task_done()
                 break
                 
             try:
-                # Simulate CPU or I/O transformations on data
-                logger.info(f"Worker #{worker_id} processing Task ID: {item.task_id}")
+                # --- STRUCTURAL PATTERN MATCHING (NEW) ---
+                match item:
+                    case DataPayload(payload_type="AlertSystem", metadata={"alert_level": "CRITICAL"}):
+                        logger.warning(f"🚨 Worker #{worker_id} TRIGGERED IMMEDIATE ESCALATION for Critical Task {item.task_id}!")
+                        
+                    case DataPayload(payload_type="SensorTelemetrics", metadata={"voltage": v}) if v > 200:
+                        logger.info(f"⚡ Worker #{worker_id} routing high voltage telemetry ({v}V) for Task {item.task_id}")
+                        
+                    case DataPayload(payload_type=str() as p_type):
+                        logger.info(f"📦 Worker #{worker_id} handling baseline protocol for {p_type} (Task {item.task_id})")
+                        
+                    case _:
+                        logger.error(f"❌ Unknown structural format received for Task {item.task_id}")
+                        
                 await asyncio.sleep(0.25)  
             except Exception as err:
                 logger.error(f"Worker #{worker_id} failed on Task ID {item.task_id}: {err}")
             finally:
                 self.queue.task_done()
 
-# --- 5. APPLICATION ENTRYPOINT ---
+# --- 6. APPLICATION ENTRYPOINT ---
 async def main() -> None:
-    # Safely coordinate resource allocations using the context manager
     async with ManagedQueueContext(maxsize=5) as data_queue:
         engine = DataProcessingEngine(queue=data_queue)
         
-        # Concurrently fire off Producer and multi-worker Consumers
-        producer_task = asyncio.create_task(engine.producer(total_items=10))
+        producer_task = asyncio.create_task(engine.producer(total_items=6))
         consumer_tasks = [
             asyncio.create_task(engine.consumer(worker_id=1)),
             asyncio.create_task(engine.consumer(worker_id=2))
         ]
         
-        # Keep track of scheduling execution paths
         await asyncio.gather(producer_task)
-        await data_queue.join()  # Blocks until all items are fully processed
+        await data_queue.join()  
         
-        # Clean up remaining hanging coroutines cleanly
         for task in consumer_tasks:
             task.cancel()
 
 if __name__ == "__main__":
-    # Execute the asynchronous event loop safely 
     asyncio.run(main())
