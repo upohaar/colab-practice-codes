@@ -523,3 +523,18 @@ async def main() -> None:
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+
+
+# Inside your DataProcessingEngine or Consumer loop:
+# Replace the baseline logger statements with active telemetry tracking:
+
+metrics = EngineMetrics()
+
+# 1. Inside your pattern matching consumer block:
+case DataPayload(payload_type="AlertSystem"):
+    metrics.critical_alerts += 1  # Increments the descriptor
+    metrics.processed_tasks += 1
+
+# 2. Print summaries at the end of main():
+logger.info(f"Final Pipeline Telemetry Report: {metrics.get_summary()}")
