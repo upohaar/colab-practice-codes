@@ -424,12 +424,12 @@ def async_timed(func: Callable[..., Any]) -> Callable[..., Any]:
     return wrapper
 
 # --- 3. DATA LAYER WITH TYPE HINTING ---
-@dataclass(frozen=True)
-class DataPayload:
-    """An immutable data record utilizing static typing guidelines."""
-    task_id: int
-    payload_type: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+# @dataclass(frozen=True)
+# class DataPayload:
+#     """An immutable data record utilizing static typing guidelines."""
+#     task_id: int
+#     payload_type: str
+#     metadata: Dict[str, Any] = field(default_factory=dict)
 
 # --- 4. RESOURCE MANAGEMENT: CONTEXT MANAGER ---
 class ManagedQueueContext(metaclass=EnforceTypeHintsMeta):
