@@ -473,6 +473,27 @@ class DataProcessingEngine(metaclass=EnforceTypeHintsMeta):
         await self.queue.put(None)  # type: ignore
 
     @async_timed
+
+
+    async def main() -> None:
+    async with ManagedQueueContext(maxsize=5) as data_queue:
+        engine = DataProcessingEngine(queue=data_queue)
+        
+        producer_task = asyncio.create_task(engine.producer(total_items=6))
+        consumer_tasks = [
+            asyncio.create_task(engine.consumer(worker_id=1)),
+            asyncio.create_task(engine.consumer(worker_id=2))
+        ]
+        
+        await asyncio.gather(producer_task)
+        await data_queue.join()  
+        
+        for task in consumer_tasks:
+            task.cancel()
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
     async def consumer(self, worker_id: int) -> None:
         """Consumes batches safely and routes them via Structural Pattern Matching."""
         while True:
@@ -505,24 +526,6 @@ class DataProcessingEngine(metaclass=EnforceTypeHintsMeta):
                 self.queue.task_done()
 
 # --- 6. APPLICATION ENTRYPOINT ---
-async def main() -> None:
-    async with ManagedQueueContext(maxsize=5) as data_queue:
-        engine = DataProcessingEngine(queue=data_queue)
-        
-        producer_task = asyncio.create_task(engine.producer(total_items=6))
-        consumer_tasks = [
-            asyncio.create_task(engine.consumer(worker_id=1)),
-            asyncio.create_task(engine.consumer(worker_id=2))
-        ]
-        
-        await asyncio.gather(producer_task)
-        await data_queue.join()  
-        
-        for task in consumer_tasks:
-            task.cancel()
-
-if __name__ == "__main__":
-    asyncio.run(main())
 
 
 
