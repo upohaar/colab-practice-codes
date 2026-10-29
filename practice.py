@@ -524,8 +524,3 @@ if __name__ == "__main__":
                 logger.error(f"Worker #{worker_id} failed on Task ID {item.task_id}: {err}")
             finally:
                 self.queue.task_done()
-
-# --- 6. APPLICATION ENTRYPOINT ---
-
-
-
