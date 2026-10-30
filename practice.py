@@ -449,6 +449,7 @@ class ManagedQueueContext(metaclass=EnforceTypeHintsMeta):
             logger.error(f"Context exited with an unhandled exception: {exc_val}")
 
 # --- 5. ASYNC CONCURRENCY ENGINE WITH STRUCTURAL MATCHING ---
+
 class DataProcessingEngine(metaclass=EnforceTypeHintsMeta):
     """Concurrently produces and processes intensive streams, validated by EnforceTypeHintsMeta."""
     
