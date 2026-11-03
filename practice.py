@@ -525,3 +525,30 @@ if __name__ == "__main__":
                 logger.error(f"Worker #{worker_id} failed on Task ID {item.task_id}: {err}")
             finally:
                 self.queue.task_done()
+
+
+
+
+
+
+
+
+import random
+
+# Generate a random number between 1 and 20
+secret_number = random.randint(1, 20)
+attempts = 0
+
+print("I am thinking of a number between 1 and 20.")
+
+while True:
+    guess = int(input("Take a guess: "))
+    attempts += 1
+    
+    if guess < secret_number:
+        print("Too low! Try again.")
+    elif guess > secret_number:
+        print("Too high! Try again.")
+    else:
+        print(f"Correct! You found it in {attempts} attempts.")
+        break
